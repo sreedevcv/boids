@@ -17,8 +17,8 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
 
     const char *vert_code_str = vert_code.c_str();
     const char *frag_code_str = frag_code.c_str();
-    
-    const auto get_error = [&](unsigned int shader, bool is_program = false) {
+
+    const auto get_error = [&](unsigned int shader, bool is_vert_shader = true, bool is_program = false) {
         int success;
         char log[512];
         if (is_program) {
@@ -31,11 +31,12 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
         if (!success) {
             if (is_program) {
                 glGetProgramInfoLog(ID, 512, nullptr, log);
+                std::cout << "[ERROR]::" << "LINK" << "::\n";
             }
             else {
                 glGetShaderInfoLog(shader, 512, nullptr, log);
+                std::cout << "[ERROR]::" << (is_vert_shader ? "VERT" : "FRAG") << "::\n";
             }
-            std::cout << "[ERROR]::" << vert_source << "::\n";
             std::cout << log << "\n";
         }
     };
@@ -48,7 +49,7 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
     unsigned int frag_shader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(frag_shader, 1, &frag_code_str, nullptr);
     glCompileShader(frag_shader);
-    get_error(frag_shader);
+    get_error(frag_shader, false);
 
     ID = glCreateProgram();
     glAttachShader(ID, vert_shader);
