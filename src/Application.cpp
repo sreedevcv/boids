@@ -64,17 +64,33 @@ Application::Application() {
     //     1, 2, 3  // second triangle
     // };
 
-    float vertices[] = {
-        // positions          // texture coords
-         0.5f,  0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-        -0.5f, -0.5f, 0.0f,
-        -0.5f,  0.5f, 0.0f,
-    };
-    unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
-    };
+    // float vertices[] = {
+    //     // positions          // texture coords
+    //     -0.5f,  0.0f, 0.5f,
+    //     0.5f, 0.0f, 0.5f,
+    //     0.5f, 0.0f, -0.5f,
+    //     0.0f, 0.5f, 0.0f,
+    // };
+    // unsigned int indices[] = {
+    //     0, 1, 3, // first triangle
+    //     1, 2, 3,  // second triangle
+    //     2, 0, 3,
+    //     2, 1, 0,
+    // };
+float vertices[] = {
+    // positions          
+    0.0f,  0.5f,  0.0f,  // Top vertex
+   -0.5f, -0.5f,  0.5f,  // Bottom-left vertex
+    0.5f, -0.5f,  0.5f,  // Bottom-right vertex
+    0.0f, -0.5f, -0.5f   // Back vertex
+};
+
+unsigned int indices[] = {
+    0, 1, 2,  // Front face
+    0, 1, 3,  // Left face
+    0, 2, 3,  // Right face
+    1, 2, 3   // Bottom face
+};
 
     unsigned int VBO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -133,7 +149,7 @@ void Application::draw() {
     glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
     glm::mat4 view          = glm::mat4(1.0f);
     glm::mat4 projection    = glm::mat4(1.0f);
-    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
@@ -145,7 +161,7 @@ void Application::draw() {
     glBindVertexArray(VAO);
     // glDrawArrays(GL_TRIANGLES, 0, 3);
     // glDrawArrays(GL_TRIANGLES, 0, 12);
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
     // boid_mesh.draw();
     check_for_opengl_error(__FILE__, __LINE__);
 }
