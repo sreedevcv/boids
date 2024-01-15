@@ -6,7 +6,7 @@ Application::Application() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(800, 600, "Boids", nullptr, nullptr);
+    window = glfwCreateWindow(width, height, "Boids", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to load window\n";
         glfwTerminate();
@@ -25,44 +25,133 @@ Application::Application() {
         std::exit(-1);
     }
 
+    glEnable(GL_DEPTH_TEST);
+
+    // float vertices[] = {
+    //     0.5f, -0.5f, 0.0f, 1.0f,
+    //     -0.5f, -0.5f, 0.0f, 1.0f,
+    //     0.0f, 0.5f, 0.0f, 1.0f,
+    // };
+
+    // float vertices[] = {
+    //     // Front face
+    //     -0.5f, 0.0f, 0.5f, 1.0f,
+    //     0.5f, 0.0f, 0.5f, 1.0f,
+    //     0.0f, 0.0f, 0.7f, 1.0f,
+    //     // Left face
+    //     0.5f, 0.0f, 0.5f, 1.0f,
+    //     0.0f, 0.0f, -0.5f, 1.0f,
+    //     0.0f, 0.0f, 0.7f, 1.0f,
+    //     // Right face
+    //     0.5f, 0.0f, -0.5f, 1.0f,
+    //     -0.5f, 0.0f, 0.5f, 1.0f,
+    //     0.0f, 0.0f, 0.7f, 1.0f,
+    //     // Bottom face
+    //     0.0f, 0.0f, -0.5f, 1.0f,
+    //     0.5f, 0.0f, 0.5f, 1.0f,
+    //     -0.5f, 0.0f, 0.5f, 1.0f,
+    // };
+
+    // float vertices[] = {
+    //     // positions          // texture coords
+    //      0.5f,  0.5f, 0.0f,
+    //      0.5f, -0.5f, 0.0f,
+    //     -0.5f, -0.5f, 0.0f,
+    //     -0.5f,  0.5f, 0.0f,
+    // };
+    // unsigned int indices[] = {
+    //     0, 1, 3, // first triangle
+    //     1, 2, 3  // second triangle
+    // };
+
     float vertices[] = {
-        0.5f, -0.5f, 0.0f, 1.0f,
-        -0.5f, -0.5f, 0.0f, 1.0f,
-        0.0f, 0.5f, 0.0f, 1.0f,
+        // positions          // texture coords
+         0.5f,  0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+        -0.5f,  0.5f, 0.0f,
+    };
+    unsigned int indices[] = {
+        0, 1, 3, // first triangle
+        1, 2, 3  // second triangle
     };
 
-    unsigned int VAO, VBO;
-    glGenBuffers(1, &VBO);
+    unsigned int VBO, EBO;
     glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
 
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), (void*) vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_TRUE, 4 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
     basic_shader.compile("res/shaders/basic.vert", "res/shaders/basic.frag");
-    triangleVAO = VAO;
+    // basic_shader.use();
+    // basic_shader.set_uniform_matrix("projection", &projection);
+    
+    check_for_opengl_error(__FILE__, __LINE__);
+
+
+
+    // boid_mesh.load();
+    // glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+    // boid_mesh.basic_shader.use();
+    // boid_mesh.basic_shader.set_uniform_matrix("projection", &projection);
+
 }
 
 Application::~Application() {
-    basic_shader.unload();
+    // basic_shader.unload();
     glfwTerminate();
 }
 
 void Application::update() {
+    // glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
+    // glm::mat4 model = glm::mat4(1.0f);
+    // model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+    // // model = glm::scale(model, glm::vec3(5.0f, 5.0f, 5.0f));
+    // // float t = 5.0 * std::sin(glfwGetTime() * 3);
+
+    // // boid_mesh.basic_shader.use();
+    // // boid_mesh.basic_shader.set_uniform_matrix("view", &view);
+    // // boid_mesh.basic_shader.set_uniform_matrix("model", &model);
+
+
+    check_for_opengl_error(__FILE__, __LINE__);
 }
 
 void Application::draw() {
+
+    glm::mat4 model         = glm::mat4(1.0f); // make sure to initialize matrix to identity matrix first
+    glm::mat4 view          = glm::mat4(1.0f);
+    glm::mat4 projection    = glm::mat4(1.0f);
+    model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+    view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+    projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
+
+
     basic_shader.use();
-    glBindVertexArray(triangleVAO);
-    glDrawArrays(GL_TRIANGLES, 0, 3);
+    basic_shader.set_uniform_matrix("view", &view);
+    basic_shader.set_uniform_matrix("model", &model);
+    basic_shader.set_uniform_matrix("projection", &projection);
+    glBindVertexArray(VAO);
+    // glDrawArrays(GL_TRIANGLES, 0, 3);
+    // glDrawArrays(GL_TRIANGLES, 0, 12);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    // boid_mesh.draw();
+    check_for_opengl_error(__FILE__, __LINE__);
 }
 
 void Application::start() {
     while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(window, true);
@@ -71,10 +160,11 @@ void Application::start() {
         update();
 
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         draw();
 
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
 }

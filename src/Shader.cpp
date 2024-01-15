@@ -37,8 +37,9 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
                 glGetShaderInfoLog(shader, 512, nullptr, log);
                 std::cout << "[ERROR]::" << (is_vert_shader ? "VERT" : "FRAG") << "::\n";
             }
-            std::cout << log << "\n";
+            std::cout << log << std::endl;
         }
+
     };
 
     unsigned int vert_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -55,7 +56,7 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
     glAttachShader(ID, vert_shader);
     glAttachShader(ID, frag_shader);
     glLinkProgram(ID);
-    get_error(ID, true);
+    get_error(ID, false, true);
 
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);
@@ -67,4 +68,9 @@ void Shader::use() {
 
 void Shader::unload() {
     glDeleteProgram(ID);
+}
+
+void Shader::set_uniform_matrix(const char *name, glm::mat4 *value) {
+    int loc = glGetUniformLocation(ID, name);
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(*value));
 }
