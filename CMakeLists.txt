@@ -24,6 +24,7 @@ add_executable(
     boids 
     src/main.cpp
     src/Application.cpp 
+    src/Shader.cpp 
     src/glad.c 
 )
 
