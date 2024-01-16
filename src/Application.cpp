@@ -78,11 +78,11 @@ Application::Application() {
     //     2, 1, 0,
     // };
 float vertices[] = {
-    // positions          
-    0.0f,  0.5f,  0.0f,  // Top vertex
-   -0.5f, -0.5f,  0.5f,  // Bottom-left vertex
-    0.5f, -0.5f,  0.5f,  // Bottom-right vertex
-    0.0f, -0.5f, -0.5f   // Back vertex
+    // positions        // Colors    
+    0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,  // Top vertex
+   -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f,  // Bottom-left vertex
+    0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f,  // Bottom-right vertex
+    0.0f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f,  // Back vertex
 };
 
 unsigned int indices[] = {
@@ -104,8 +104,11 @@ unsigned int indices[] = {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
     // glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
     basic_shader.compile("res/shaders/basic.vert", "res/shaders/basic.frag");
@@ -150,6 +153,8 @@ void Application::draw() {
     glm::mat4 view          = glm::mat4(1.0f);
     glm::mat4 projection    = glm::mat4(1.0f);
     model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
+    // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(1.0f, 0.0f, 0.0f));
+    model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
     view  = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
     projection = glm::perspective(glm::radians(45.0f), (float)width / (float)height, 0.1f, 100.0f);
 
@@ -159,7 +164,6 @@ void Application::draw() {
     basic_shader.set_uniform_matrix("model", &model);
     basic_shader.set_uniform_matrix("projection", &projection);
     glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 3);
     // glDrawArrays(GL_TRIANGLES, 0, 12);
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
     // boid_mesh.draw();
