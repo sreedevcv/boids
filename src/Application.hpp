@@ -18,11 +18,12 @@ private:
     int scr_width = 800;
     int scr_height = 600;
     GLFWwindow *window;
-    // Pyramid boid_mesh;
     Camera camera;
     Boid *b;
+
+    float movement_speed = 4.0f;
     
-    void update();
+    void update(float delta_time);
     void draw();
 
     
@@ -32,4 +33,5 @@ public:
     ~Application();
 
     void start();
+    void process_input(float delta_time);
 };
