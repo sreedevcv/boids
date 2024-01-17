@@ -7,7 +7,7 @@
 
 class Pyramid {
 private:
-    unsigned int VAO, VBO;
+    unsigned int VAO, VBO, EBO;
 
 public:
     Shader basic_shader;

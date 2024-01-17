@@ -16,10 +16,10 @@ private:
     int width = 800;
     int height = 600;
     GLFWwindow *window;
-    // Pyramid boid_mesh;
+    Pyramid boid_mesh;
 
-    Shader basic_shader;
-    unsigned int VAO;
+    // Shader basic_shader;
+    // unsigned int VAO;
 
     glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 10.0f);
     glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
