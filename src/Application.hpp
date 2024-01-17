@@ -13,13 +13,10 @@
 
 class Application {
 private:
-    int width = 800;
-    int height = 600;
+    int scr_width = 800;
+    int scr_height = 600;
     GLFWwindow *window;
     Pyramid boid_mesh;
-
-    // Shader basic_shader;
-    // unsigned int VAO;
 
     glm::vec3 camera_pos = glm::vec3(0.0f, 0.0f, 10.0f);
     glm::vec3 camera_front = glm::vec3(0.0f, 0.0f, -1.0f);
@@ -35,7 +32,7 @@ private:
     }
 
 public:
-    Application();
+    Application(GLFWwindow *window, const int width, const int height);
     ~Application();
 
     void start();

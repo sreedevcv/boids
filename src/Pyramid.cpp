@@ -1,12 +1,6 @@
 #include "Pyramid.hpp"
 
-Pyramid::~Pyramid() {
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    basic_shader.unload();
-}
-
-void Pyramid::load() {
+Pyramid::Pyramid() {
     float vertices[] = {
         // positions        // Colors    
         0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,  // Top vertex
@@ -40,9 +34,14 @@ void Pyramid::load() {
     basic_shader.compile("res/shaders/basic.vert", "res/shaders/basic.frag");
 }
 
+Pyramid::~Pyramid() {
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    basic_shader.unload();
+}
+
 void Pyramid::draw() {
     basic_shader.use();
     glBindVertexArray(VAO);
-    // glDrawArrays(GL_TRIANGLES, 0, 12);
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
 }

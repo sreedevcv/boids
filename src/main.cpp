@@ -1,7 +1,37 @@
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+
 #include "Application.hpp"
 
 int main() {
-    Application app;
+    int width = 800;
+    int height = 600;
+
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
+      GLFWwindow *window = glfwCreateWindow(width, height, "Boids", nullptr, nullptr);
+    if (window == nullptr) {
+        std::cout << "Failed to load window\n";
+        glfwTerminate();
+        std::exit(-1);
+    }
+
+    const auto framebuffer_size_callback = [](GLFWwindow *window, int width, int height) {
+        glViewport(0, 0, width, height);
+    };
+
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        std::exit(-1);
+    }
+
+    Application app(window, width, height);
     app.start();
     return 0;
 }

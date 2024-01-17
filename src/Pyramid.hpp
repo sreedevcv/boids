@@ -12,9 +12,8 @@ private:
 public:
     Shader basic_shader;
 
-    Pyramid() = default;
+    Pyramid();
     ~Pyramid();
 
-    void load();
     void draw();
 };
