@@ -12,7 +12,7 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-      GLFWwindow *window = glfwCreateWindow(width, height, "Boids", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(width, height, "Boids", nullptr, nullptr);
     if (window == nullptr) {
         std::cout << "Failed to load window\n";
         glfwTerminate();

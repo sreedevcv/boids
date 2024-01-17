@@ -34,6 +34,7 @@ add_executable(
     src/Shader.cpp 
     src/Boid.cpp 
     src/Pyramid.cpp 
+    src/Camera.cpp 
     src/glad.c 
 )
 

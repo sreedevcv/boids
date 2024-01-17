@@ -32,12 +32,13 @@ Pyramid::Pyramid() {
     glEnableVertexAttribArray(1);
 
     basic_shader.compile("res/shaders/basic.vert", "res/shaders/basic.frag");
+
+    check_for_opengl_error(__FILE__, __LINE__);
 }
 
 Pyramid::~Pyramid() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    basic_shader.unload();
 }
 
 void Pyramid::draw() {

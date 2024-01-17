@@ -16,11 +16,15 @@ private:
     unsigned int ID;
 public:
     Shader() = default;
-    ~Shader() = default;
+    ~Shader();
 
     void compile(const char *vert_shader, const char *frag_shader);
     void use();
-    void unload();
-    void set_uniform_matrix(const char *name, glm::mat4 *value);
+    void set_uniform_matrix(const char *name, glm::mat4& value);
 };
 
+inline void check_for_opengl_error(const char *file, int line) {
+    while (GLenum error = glGetError()) {
+        std::cout << file << ":" << line << " OpenGL Error: " << error << std::endl;
+    }
+}

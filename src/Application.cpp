@@ -1,17 +1,17 @@
 #include "Application.hpp"
 
-Application::Application(GLFWwindow *glfw_window, const int width, const int height)
-    : window(glfw_window),
-      scr_width(width),
-      scr_height(height) 
+Application::Application(GLFWwindow *glfw_window, const int width, const int height) :
+    window(glfw_window),
+    scr_width(width),
+    scr_height(height),
+    camera(width, height)
 {
     glEnable(GL_DEPTH_TEST);
 
     check_for_opengl_error(__FILE__, __LINE__);
 
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
-    boid_mesh.basic_shader.use();
-    boid_mesh.basic_shader.set_uniform_matrix("projection", &projection);
+    // Boid boid(camera);
+    b = new Boid(camera);
 
     check_for_opengl_error(__FILE__, __LINE__);
 }
@@ -22,20 +22,12 @@ Application::~Application() {
 
 void Application::update() {
 
-    check_for_opengl_error(__FILE__, __LINE__);
+    // check_for_opengl_error(__FILE__, __LINE__);
 }
 
 void Application::draw() {
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-    model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
-    glm::mat4 view = glm::lookAt(camera_pos, camera_pos + camera_front, camera_up);
-
-    boid_mesh.basic_shader.use();
-    boid_mesh.basic_shader.set_uniform_matrix("view", &view);
-    boid_mesh.basic_shader.set_uniform_matrix("model", &model);
-    boid_mesh.draw();
+    b->draw();
 }
 
 void Application::start() {

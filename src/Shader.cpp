@@ -1,5 +1,9 @@
 #include "Shader.hpp"
 
+Shader::~Shader() {
+    glDeleteProgram(ID);
+}
+
 void Shader::compile(const char *vert_source, const char *frag_source) {
     std::ifstream vert_file;
     std::ifstream frag_file;
@@ -60,17 +64,15 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
 
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);
+
+    check_for_opengl_error(__FILE__, __LINE__);
 }
 
 void Shader::use() {
     glUseProgram(ID);
 }
 
-void Shader::unload() {
-    glDeleteProgram(ID);
-}
-
-void Shader::set_uniform_matrix(const char *name, glm::mat4 *value) {
+void Shader::set_uniform_matrix(const char *name, glm::mat4& value) {
     int loc = glGetUniformLocation(ID, name);
-    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(*value));
+    glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
