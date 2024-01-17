@@ -26,4 +26,16 @@ public:
     void set_position(float x, float y, float z);
     void set_velocity(float x, float y, float z);
     void set_acceleration(float x, float y, float z);
+
+    inline glm::vec3& get_position() {
+        return position;
+    }
+    
+    inline glm::vec3& get_velocity() {
+        return velocity;
+    }
+
+    inline glm::vec3& get_acceleration() {
+        return acceleration;
+    }
 };

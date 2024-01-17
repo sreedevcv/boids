@@ -7,6 +7,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <iostream>
+#include <vector>
+#include <memory>
+#include <cstdlib>
 
 // #include "Shader.hpp"
 // #include "Pyramid.hpp"
@@ -19,19 +22,21 @@ private:
     int scr_height = 600;
     GLFWwindow *window;
     Camera camera;
-    Boid *b;
-
-    float movement_speed = 4.0f;
+    // Boid *b;
+    std::vector<std::unique_ptr<Boid>> boids;
+    int boid_count = 20;
+    float x_boundary = 20.0f;
+    float y_boundary = 20.0f;
+    float movement_speed = 7.0f;
     
     void update(float delta_time);
-    void draw();
-
-    
+    void draw();    
+    void process_input(float delta_time);
+    void init_boids();
 
 public:
     Application(GLFWwindow *window, const int width, const int height);
     ~Application();
 
     void start();
-    void process_input(float delta_time);
 };
