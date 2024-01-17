@@ -12,7 +12,8 @@ Application::Application(GLFWwindow *glfw_window, const int width, const int hei
 
     b = new Boid(camera);
     b->set_position(0.0f, 0.0f, 0.0f);
-    b->set_velocity(1.0f, 0.0f, 0.0f);
+    b->set_velocity(0.1f, 0.1f, 0.1f);
+    b->set_acceleration(1.0f, 1.0f, 1.0f);
 
     check_for_opengl_error(__FILE__, __LINE__);
 }
@@ -22,8 +23,7 @@ Application::~Application() {
 }
 
 void Application::update(float delta_time) {
-
-    // check_for_opengl_error(__FILE__, __LINE__);
+    b->update(delta_time);
 }
 
 void Application::draw() {
@@ -57,7 +57,6 @@ void Application::process_input(float delta_time) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
     }
-
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         camera.camera_pos.z += movement_speed * delta_time;
     }
