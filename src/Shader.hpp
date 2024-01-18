@@ -10,6 +10,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "utils.hpp"
+
 
 class Shader {
 private:
@@ -22,9 +24,3 @@ public:
     void use();
     void set_uniform_matrix(const char *name, glm::mat4& value);
 };
-
-inline void check_for_opengl_error(const char *file, int line) {
-    while (GLenum error = glGetError()) {
-        std::cout << file << ":" << line << " OpenGL Error: " << error << std::endl;
-    }
-}

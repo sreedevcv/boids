@@ -1,6 +1,10 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include "Application.hpp"
 
 int main() {
@@ -30,6 +34,15 @@ int main() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         std::exit(-1);
     }
+
+    glEnable(GL_DEPTH_TEST);
+
+    ImGui::CreateContext();
+    // ImGuiIO& io = ImGui::GetIO();
+    ImGui::StyleColorsDark();
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+    const char* glsl_version = "#version 330";
+    ImGui_ImplOpenGL3_Init(glsl_version);
 
     Application app(window, width, height);
     app.start();

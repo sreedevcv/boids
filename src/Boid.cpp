@@ -1,15 +1,40 @@
 #include "Boid.hpp"
 
-Boid::Boid(Camera &main_camera) :
-    camera(main_camera) {
+Boid::Boid(Camera &main_camera, BoidConfig& boid_config) :
+    camera(main_camera),
+    config(boid_config) {
     mesh.basic_shader.use();
     mesh.basic_shader.set_uniform_matrix("projection", camera.projection);
     check_for_opengl_error(__FILE__, __LINE__);
 }
 
-void Boid::update(float delta_time) {
+void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
     velocity += acceleration * delta_time;
     position += velocity * delta_time;
+
+    // Cohesion
+    glm::vec3 center_of_mass = glm::vec3(0.0f);
+    int count = 0;
+
+    for (const auto& boid: boids) {
+        if (glm::distance(position, boid->get_position()) <= config.cohesion_radius) {
+            center_of_mass += boid->get_position();
+            count += 1;
+        }
+    }
+
+    center_of_mass /= count;
+    glm::vec3 desired =  center_of_mass - position;
+    desired = glm::normalize(center_of_mass) * config.max_speed;
+    desired -= velocity;
+    
+    acceleration = glm::normalize(desired) * config.min_speed;
+    
+}
+
+
+void Boid::alignment() {
+    
 }
 
 void Boid::draw() {

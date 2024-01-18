@@ -38,6 +38,14 @@ add_executable(
     src/glad.c 
 )
 
-target_link_libraries(boids glfw ImGui::imgui_core ${GLFW_LIBRARIES} OpenGL::GL glm::glm)
+target_link_libraries(
+    boids 
+    glfw 
+    ImGui::imgui_core 
+    ImGui::glfw_opengl3
+    ${GLFW_LIBRARIES} 
+    OpenGL::GL 
+    glm::glm
+)
 
 # -D GLFW_USE_WAYLAND=1

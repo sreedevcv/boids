@@ -6,6 +6,10 @@
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <imgui.h>
+#include <backends/imgui_impl_glfw.h>
+#include <backends/imgui_impl_opengl3.h>
+
 #include <iostream>
 #include <vector>
 #include <memory>
@@ -22,17 +26,18 @@ private:
     int scr_height = 600;
     GLFWwindow *window;
     Camera camera;
-    // Boid *b;
+
     std::vector<std::unique_ptr<Boid>> boids;
-    int boid_count = 20;
-    float x_boundary = 20.0f;
-    float y_boundary = 20.0f;
-    float movement_speed = 7.0f;
+    int boid_count = 100;
+    float x_boundary = 25.0f;
+    float y_boundary = 25.0f;
+    float max_speed = 8.0f;
+    float player_speed = 7.0f;
     
     void update(float delta_time);
     void draw();    
     void process_input(float delta_time);
-    void init_boids();
+    void init_boids(BoidConfig& config);
 
 public:
     Application(GLFWwindow *window, const int width, const int height);
