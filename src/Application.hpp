@@ -30,7 +30,6 @@ private:
 
 
     std::vector<std::unique_ptr<Boid>> boids;
-    int boid_count = 100;
     float max_speed = 8.0f;
     float player_speed = 7.0f;
     

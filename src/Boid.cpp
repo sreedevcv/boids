@@ -14,11 +14,14 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
 
     // Cohesion
     glm::vec3 center_of_mass = glm::vec3(0.0f);
+    glm::vec3 alignment_dir = glm::vec3(0.0f);
     int count = 0;
 
     for (const auto& boid: boids) {
         if (glm::distance(position, boid->get_position()) <= config.cohesion_radius) {
             center_of_mass += boid->get_position();
+            alignment_dir += glm::normalize(boid->get_velocity());
+            // alignment_dir += (boid->get_velocity());
             count += 1;
         }
     }
@@ -26,7 +29,13 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
     center_of_mass /= count;
     glm::vec3 desired =  center_of_mass - position;
     desired -= velocity;
-    acceleration = glm::normalize(desired) * config.min_speed;   
+    acceleration = glm::normalize(desired) * config.min_speed;  
+    // acceleration.z = 0;
+
+    alignment_dir /= count;
+    alignment_dir -= velocity;
+    acceleration += glm::normalize(alignment_dir) * config.min_speed;
+    acceleration.z = 0;
 }
 
 

@@ -75,12 +75,12 @@ void Application::start() {
             ImGui::DragFloat("Min Speed", &config.min_speed);
             ImGui::DragFloat("X Bounds", &config.x_boundary, 0.1f, 0.0f, FLT_MAX);
             ImGui::DragFloat("Y Bounds", &config.y_boundary, 0.1f, 0.0f, FLT_MAX);
-            
+
             if (ImGui::Button("Generate")) {
                 init_boids(config);
             }
             ImGui::SameLine();
-            ImGui::DragInt("Boid Count", &boid_count, 1.0f, 0, 1000);
+            ImGui::DragInt("Boid Count", &config.boid_count, 1.0f, 0, 1000);
 
             ImGui::End();
         }
@@ -108,7 +108,7 @@ void Application::process_input(float delta_time) {
 void Application::init_boids(BoidConfig& config) {
     boids.clear();
 
-    for (int i = 0; i < boid_count; i++) {
+    for (int i = 0; i < config.boid_count; i++) {
         boids.push_back(std::make_unique<Boid>(camera, config));
         
         float p_x = rand() % (int)(2 * config.x_boundary);
