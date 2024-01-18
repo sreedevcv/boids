@@ -26,11 +26,11 @@ private:
     int scr_height = 600;
     GLFWwindow *window;
     Camera camera;
+    BoidConfig config;
+
 
     std::vector<std::unique_ptr<Boid>> boids;
     int boid_count = 100;
-    float x_boundary = 25.0f;
-    float y_boundary = 25.0f;
     float max_speed = 8.0f;
     float player_speed = 7.0f;
     

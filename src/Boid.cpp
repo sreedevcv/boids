@@ -25,11 +25,8 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
 
     center_of_mass /= count;
     glm::vec3 desired =  center_of_mass - position;
-    desired = glm::normalize(center_of_mass) * config.max_speed;
     desired -= velocity;
-    
-    acceleration = glm::normalize(desired) * config.min_speed;
-    
+    acceleration = glm::normalize(desired) * config.min_speed;   
 }
 
 

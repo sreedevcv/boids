@@ -8,8 +8,8 @@
 #include "Application.hpp"
 
 int main() {
-    int width = 800;
-    int height = 600;
+    int width = 1000;
+    int height = 800;
 
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);

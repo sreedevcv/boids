@@ -8,8 +8,6 @@ Application::Application(GLFWwindow *glfw_window, const int width, const int hei
 {
     camera.camera_pos.z = 70.0f;
 
-    BoidConfig config;
-
     init_boids(config);
     check_for_opengl_error(__FILE__, __LINE__);
 }
@@ -18,7 +16,7 @@ Application::~Application() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-    
+
     glfwDestroyWindow(window);
     glfwTerminate();
 }
@@ -28,12 +26,12 @@ void Application::update(float delta_time) {
         boid->update(delta_time, boids);
 
         glm::vec3& pos = boid->get_position();
-        if (std::abs(pos.x) > x_boundary) {
+        if (std::abs(pos.x) > config.x_boundary) {
             // boid->get_velocity().x *= -1;
             pos.x *= -1;
             // pos.y *= -1;
         }
-        if (std::abs(pos.y) > y_boundary) {
+        if (std::abs(pos.y) > config.y_boundary) {
             // boid->get_velocity().y *= -1;
             // pos.x *= -1;
             pos.y *= -1;
@@ -69,11 +67,21 @@ void Application::start() {
         draw();
 
         if (show_window) {
-            ImGui::Begin("My window", &show_window);
-            ImGui::Text("Hello World!");
-            if (ImGui::Button("Close Me")) {
-                show_window = false;
+            // ImGui::ShowDemoWindow();
+
+            ImGui::Begin("Controls", &show_window);
+            ImGui::DragFloat("Cohesion Radius", &config.cohesion_radius, 0.1f, 0.0f, FLT_MAX);
+            ImGui::DragFloat("Max Speed", &config.max_speed);
+            ImGui::DragFloat("Min Speed", &config.min_speed);
+            ImGui::DragFloat("X Bounds", &config.x_boundary, 0.1f, 0.0f, FLT_MAX);
+            ImGui::DragFloat("Y Bounds", &config.y_boundary, 0.1f, 0.0f, FLT_MAX);
+            
+            if (ImGui::Button("Generate")) {
+                init_boids(config);
             }
+            ImGui::SameLine();
+            ImGui::DragInt("Boid Count", &boid_count, 1.0f, 0, 1000);
+
             ImGui::End();
         }
         
@@ -103,10 +111,10 @@ void Application::init_boids(BoidConfig& config) {
     for (int i = 0; i < boid_count; i++) {
         boids.push_back(std::make_unique<Boid>(camera, config));
         
-        float p_x = rand() % (int)(2 * x_boundary);
-        float p_y = rand() % (int)(2 * y_boundary);
-        p_x -= x_boundary;
-        p_y -= y_boundary;
+        float p_x = rand() % (int)(2 * config.x_boundary);
+        float p_y = rand() % (int)(2 * config.y_boundary);
+        p_x -= config.x_boundary;
+        p_y -= config.y_boundary;
         boids.back()->set_position(p_x, p_y, 0.0f);
 
         float v_x = rand() % (int)(2 * max_speed);
