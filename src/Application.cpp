@@ -15,6 +15,11 @@ Application::Application(GLFWwindow *glfw_window, const int width, const int hei
 }
 
 Application::~Application() {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    
+    glfwDestroyWindow(window);
     glfwTerminate();
 }
 
