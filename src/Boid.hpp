@@ -19,9 +19,11 @@ private:
     glm::vec3 position;
     glm::vec3 velocity;
     glm::vec3 acceleration;
-    float mass;
+    // float mass;
 
-    void alignment();
+    glm::vec3 alignment(std::vector<std::unique_ptr<Boid>>& boids);
+    glm::vec3 cohesion(std::vector<std::unique_ptr<Boid>>& boids);
+    glm::vec3 seperation(std::vector<std::unique_ptr<Boid>>& boids);
 
 public:
     Boid(Camera &camera, BoidConfig& boid_config);
