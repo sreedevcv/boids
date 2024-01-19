@@ -25,6 +25,8 @@ private:
     glm::vec3 cohesion(std::vector<std::unique_ptr<Boid>>& boids);
     glm::vec3 seperation(std::vector<std::unique_ptr<Boid>>& boids);
 
+    void clamp_velocity();
+
 public:
     Boid(Camera &camera, BoidConfig& boid_config);
     ~Boid() = default;

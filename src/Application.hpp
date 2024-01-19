@@ -35,6 +35,7 @@ private:
     
     void update(float delta_time);
     void draw();    
+    void draw_ui(bool show_window);
     void process_input(float delta_time);
     void init_boids(BoidConfig& config);
 

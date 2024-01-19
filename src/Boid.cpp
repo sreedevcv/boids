@@ -23,8 +23,8 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
         acceleration += seperation(boids);
     }
 
-    velocity += acceleration * delta_time;
-    velocity = glm::min(velocity, glm::vec3(1.0f) * config.max_speed);
+    velocity += acceleration;
+    clamp_velocity();
     velocity.z = 0;
     position += velocity * delta_time;
 }
@@ -42,7 +42,7 @@ glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>>& boids) {
         float distance = glm::distance(position, boid->get_position());
 
         if (distance <= config.alignment_radius) {
-            alignment_dir += glm::normalize(boid->get_velocity());
+            alignment_dir += boid->get_velocity();
             count += 1;
         }
     }
@@ -51,11 +51,9 @@ glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>>& boids) {
         return impulse;
     }
 
-    alignment_dir /= count;
-    alignment_dir -= velocity;
-    alignment_dir = glm::normalize(alignment_dir) * config.max_speed;   // set mag
+    alignment_dir /= (float) count;
     if (glm::length(alignment_dir) > 1000.0f) {printf("alignment_dir\n");}
-    impulse = glm::min(glm::normalize(alignment_dir) * config.min_speed, alignment_dir);
+    impulse = alignment_dir * config.alignment_factor;
     impulse.z = 0;
     return impulse;
 }
@@ -82,14 +80,11 @@ glm::vec3 Boid::cohesion(std::vector<std::unique_ptr<Boid>>& boids) {
         return impulse;
     }
 
-    center_of_mass /= count;
+    center_of_mass /= (float) count;
     glm::vec3 desired =  center_of_mass - position;
-    desired -= velocity;
-    desired = glm::normalize(desired) * config.max_speed;   // set mag
-    if (glm::length(desired) > 1000.0f) {printf("cohesion\n");}
-    impulse = glm::min(glm::normalize(desired) * config.min_speed, desired);
-
-    // if (glm::length(impulse) > 1000.0f) {printf("large ch\n");}
+    desired = glm::normalize(desired);
+    impulse = desired * config.cohesion_factor;
+    if (glm::length(impulse) > 1000.0f) {printf("cohesion\n");}
     impulse.z = 0;
     return impulse;
 }
@@ -110,7 +105,7 @@ glm::vec3 Boid::seperation(std::vector<std::unique_ptr<Boid>>& boids) {
 
         if (distance <= config.seperation_radius) {
             if (distance <= 0.1f) distance = 0.1f;
-            avg_distance += (position - boid->get_position()) / (distance);
+            avg_distance += glm::normalize(position - boid->get_position()) / (distance);
             count += 1;
         }
     }
@@ -119,14 +114,19 @@ glm::vec3 Boid::seperation(std::vector<std::unique_ptr<Boid>>& boids) {
         return impulse;
     }
 
-    avg_distance /= count;
-    avg_distance =  avg_distance - velocity;
-    avg_distance = glm::normalize(avg_distance) * config.max_speed;   // set mag
+    avg_distance /= (float) count;
+    avg_distance *= config.seperation_factor;
     if (glm::length(avg_distance) > 1000.0f) {printf("avg_distance\n");}
-    impulse = glm::min(glm::normalize(avg_distance) * config.min_speed, avg_distance);
-    // if (glm::length(acceleration) > 1000.0f) {printf("hai\n");}
+    impulse = avg_distance;
     impulse.z = 0;
     return impulse;
+}
+
+void Boid::clamp_velocity() {
+    glm::vec3 dir = glm::normalize(velocity);
+    float mag = glm::length(velocity);
+    float speed = glm::clamp(mag, config.min_speed, config.max_speed);
+    velocity = dir * speed;
 }
 
 void Boid::draw() {

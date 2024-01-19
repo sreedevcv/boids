@@ -9,12 +9,24 @@ set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(deps/glfw)
+include_directories(deps/glfw/include)
 set_target_properties(glfw PROPERTIES COMPILE_FLAGS "-O3")
 
 # IMGUI
-add_subdirectory(deps/imgui)
-include_directories(deps/imgui-cmake)
-include_directories(deps/imgui-cmake/backends)
+# add_subdirectory(deps/imgui)
+include_directories(deps/imgui)
+include_directories(deps/imgui/backends)
+
+
+add_library(imgui  STATIC
+    deps/imgui/imgui.cpp 
+    deps/imgui/imgui_demo.cpp 
+    deps/imgui/imgui_draw.cpp 
+    deps/imgui/imgui_tables.cpp 
+    deps/imgui/imgui_widgets.cpp
+    deps/imgui/backends/imgui_impl_glfw.cpp
+    deps/imgui/backends/imgui_impl_opengl3.cpp 
+)
 
 # GLM
 set(GLM_BUILD_TESTS OFF)
@@ -41,8 +53,9 @@ add_executable(
 target_link_libraries(
     boids 
     glfw 
-    ImGui::imgui_core 
-    ImGui::glfw_opengl3
+    # ImGui::imgui_core 
+    # ImGui::glfw_opengl3
+    imgui 
     ${GLFW_LIBRARIES} 
     OpenGL::GL 
     glm::glm

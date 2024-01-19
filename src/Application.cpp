@@ -57,49 +57,13 @@ void Application::start() {
         process_input(delta_time);
         update(delta_time);
 
+
         glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
         draw();
-
-        if (show_window) {
-            // ImGui::ShowDemoWindow();
-
-            ImGui::Begin("Controls", &show_window);
-            ImGui::Checkbox("Enable Cohesion", &config.enable_cohesion);
-            ImGui::Checkbox("Enable Alignment", &config.enable_alignment);
-            ImGui::Checkbox("Enable Seperation", &config.enable_seperation);
-            ImGui::DragFloat("Cohesion Radius", &config.cohesion_radius, 0.1f, 0.0f, FLT_MAX);
-            ImGui::DragFloat("Alignment Radius", &config.alignment_radius, 0.1f, 0.0f, FLT_MAX);
-            ImGui::DragFloat("Seperation Radius", &config.seperation_radius, 0.1f, 0.0f, FLT_MAX);
-            ImGui::DragFloat("Max Speed", &config.max_speed);
-            ImGui::DragFloat("Min Speed", &config.min_speed);
-            ImGui::DragFloat("X Bounds", &config.x_boundary, 0.1f, 0.0f, FLT_MAX);
-            ImGui::DragFloat("Y Bounds", &config.y_boundary, 0.1f, 0.0f, FLT_MAX);
-
-            if (ImGui::Button("Generate")) {
-                init_boids(config);
-            }
-            ImGui::SameLine();
-            ImGui::DragInt("Boid Count", &config.boid_count, 1.0f, 0, 1000);
-
-            if (ImGui::Button("Debug")) {
-                for (auto& boid: boids) {
-                    std::cout << boid->get_position().x << " " << boid->get_position().y << " " << boid->get_position().z << " | ";
-                    std::cout << boid->get_velocity().x << " " << boid->get_velocity().y << " " << boid->get_velocity().z << " | ";
-                    std::cout << boid->get_acceleration().x << " " << boid->get_acceleration().y << " " << boid->get_acceleration().z << "\n";
-                }
-            }
-
-            ImGui::End();
-        }
-        
-        ImGui::Render();
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        draw_ui(show_window);
+       
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -138,4 +102,59 @@ void Application::init_boids(BoidConfig& config) {
         boids.back()->set_acceleration(0.0f, 0.0f, 0.0f);
         // std::cout << p_x << " " << p_y << "\n";
     }
+}
+
+
+void Application::draw_ui(bool show_window) {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    if (show_window) {
+        // ImGui::ShowDemoWindow();
+
+        ImGui::Begin("Controls", &show_window);
+        // ImGui::Text("Cohesion");
+        ImGui::BeginGroup();
+        ImGui::Checkbox("Cohesion", &config.enable_cohesion);
+        ImGui::DragFloat("Radius##1", &config.cohesion_radius, 0.1f, 0.0f, FLT_MAX);
+        ImGui::DragFloat("Factor##1", &config.cohesion_factor, 0.1f, 0.0f, FLT_MAX);
+        ImGui::EndGroup();
+        ImGui::Separator();
+
+        ImGui::Checkbox("Alignment", &config.enable_alignment);
+        ImGui::DragFloat("Radius##2", &config.alignment_radius, 0.1f, 0.0f, FLT_MAX);
+        ImGui::DragFloat("Factor##2", &config.alignment_factor, 0.1f, 0.0f, FLT_MAX);
+        ImGui::Separator();
+
+        ImGui::Checkbox("Seperation", &config.enable_seperation);
+        ImGui::DragFloat("Radius##3", &config.seperation_radius, 0.1f, 0.0f, FLT_MAX);
+        ImGui::DragFloat("Factor##3", &config.seperation_factor, 0.1f, 0.0f, FLT_MAX);
+        ImGui::Separator();
+
+        ImGui::DragFloat("Max Speed", &config.max_speed);
+        ImGui::DragFloat("Min Speed", &config.min_speed);
+        ImGui::DragFloat("X Bounds", &config.x_boundary, 0.1f, 0.0f, FLT_MAX);
+        ImGui::DragFloat("Y Bounds", &config.y_boundary, 0.1f, 0.0f, FLT_MAX);
+        ImGui::Separator();
+
+        if (ImGui::Button("Generate")) {
+            init_boids(config);
+        }
+        ImGui::SameLine();
+        ImGui::DragInt("Boid Count", &config.boid_count, 1.0f, 0, 1000);
+
+        if (ImGui::Button("Debug")) {
+            for (auto& boid: boids) {
+                std::cout << boid->get_position().x << " " << boid->get_position().y << " " << boid->get_position().z << " | ";
+                std::cout << boid->get_velocity().x << " " << boid->get_velocity().y << " " << boid->get_velocity().z << " | ";
+                std::cout << boid->get_acceleration().x << " " << boid->get_acceleration().y << " " << boid->get_acceleration().z << "\n";
+            }
+        }
+
+        ImGui::End();
+    }
+    
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
