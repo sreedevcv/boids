@@ -13,10 +13,8 @@ include_directories(deps/glfw/include)
 set_target_properties(glfw PROPERTIES COMPILE_FLAGS "-O3")
 
 # IMGUI
-# add_subdirectory(deps/imgui)
 include_directories(deps/imgui)
 include_directories(deps/imgui/backends)
-
 
 add_library(imgui  STATIC
     deps/imgui/imgui.cpp 
@@ -53,8 +51,6 @@ add_executable(
 target_link_libraries(
     boids 
     glfw 
-    # ImGui::imgui_core 
-    # ImGui::glfw_opengl3
     imgui 
     ${GLFW_LIBRARIES} 
     OpenGL::GL 
