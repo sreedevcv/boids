@@ -10,13 +10,12 @@ set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(deps/glfw)
 include_directories(deps/glfw/include)
-set_target_properties(glfw PROPERTIES COMPILE_FLAGS "-O3")
 
 # IMGUI
 include_directories(deps/imgui)
 include_directories(deps/imgui/backends)
 
-add_library(imgui  STATIC
+add_library(imgui STATIC
     deps/imgui/imgui.cpp 
     deps/imgui/imgui_demo.cpp 
     deps/imgui/imgui_draw.cpp 

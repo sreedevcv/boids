@@ -25,13 +25,12 @@ private:
     int scr_width = 800;
     int scr_height = 600;
     GLFWwindow *window;
-    Camera camera;
+    Camera& camera;
     BoidConfig config;
 
 
     std::vector<std::unique_ptr<Boid>> boids;
-    float max_speed = 8.0f;
-    float player_speed = 7.0f;
+    // float max_speed = 8.0f;
     
     void update(float delta_time);
     void draw();    
@@ -40,7 +39,7 @@ private:
     void init_boids(BoidConfig& config);
 
 public:
-    Application(GLFWwindow *window, const int width, const int height);
+    Application(GLFWwindow *window, const int width, const int height, Camera& camera);
     ~Application();
 
     void start();

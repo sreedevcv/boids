@@ -6,11 +6,16 @@
 #include <backends/imgui_impl_opengl3.h>
 
 #include "Application.hpp"
+#include "Camera.hpp"
+
+void mouse_move_callback(GLFWwindow *window, double x_pos_in, double y_pos_in);
+void mouse_scroll_callback(GLFWwindow *window, double x_offset, double y_offset);
+
+int width = 1000;
+int height = 800;
+Camera camera(width, height);
 
 int main() {
-    int width = 1000;
-    int height = 800;
-
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -29,6 +34,8 @@ int main() {
 
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_move_callback);
+    glfwSetScrollCallback(window, mouse_scroll_callback);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
@@ -37,6 +44,8 @@ int main() {
 
     glEnable(GL_DEPTH_TEST);
 
+    camera.mouse_data.first_mouse = true;
+
     ImGui::CreateContext();
     // ImGuiIO& io = ImGui::GetIO();
     ImGui::StyleColorsDark();
@@ -44,10 +53,34 @@ int main() {
     const char* glsl_version = "#version 330";
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    Application app(window, width, height);
+    Application app(window, width, height, camera);
     app.start();
     return 0;
 }
+
+void mouse_move_callback(GLFWwindow *window, double x_pos_in, double y_pos_in) {
+    float x_pos = static_cast<float>(x_pos_in);
+    float y_pos = static_cast<float>(y_pos_in);
+
+    if (camera.mouse_data.first_mouse) {
+        camera.mouse_data.last_x = x_pos;
+        camera.mouse_data.last_y = y_pos;
+        camera.mouse_data.first_mouse = false;
+    }
+    
+    float x_offset = x_pos - camera.mouse_data.last_x;
+    float y_offset = camera.mouse_data.last_y - y_pos;
+
+    camera.mouse_data.last_x = x_pos;
+    camera.mouse_data.last_y = y_pos;
+
+    camera.process_mouse_movement(x_offset, y_offset);
+}
+
+void mouse_scroll_callback(GLFWwindow *window, double x_offset, double y_offset) {
+    camera.process_mouse_scroll(static_cast<float>(y_offset));
+}
+
 
 // #include <glad/glad.h>
 // #include <GLFW/glfw3.h>

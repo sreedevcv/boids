@@ -12,7 +12,7 @@ struct BoidConfig {
     float seperation_radius = 5.0f;
 
     float cohesion_factor = 2.0f;
-    float alignment_factor = 1.0f;
+    float alignment_factor = 1.5f;
     float seperation_factor = 10.0f;
 
     bool enable_cohesion = true;
@@ -23,5 +23,5 @@ struct BoidConfig {
     float min_speed = 5.0f;
     float x_boundary = 25.0f;
     float y_boundary = 25.0f;
-    int boid_count = 50;
+    int boid_count = 250;
 };

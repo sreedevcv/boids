@@ -1,12 +1,13 @@
 #include "Application.hpp"
 
-Application::Application(GLFWwindow *glfw_window, const int width, const int height) :
+Application::Application(GLFWwindow *glfw_window, const int width, const int height, Camera& _camera) :
     window(glfw_window),
     scr_width(width),
     scr_height(height),
-    camera(width, height)
+    camera(_camera)
 {
-    camera.camera_pos.z = 70.0f;
+    // glfwSetCursorPosCallback(window, mouse_move_callback);
+    // camera.position.z = 70.0f;
 
     init_boids(config);
     check_for_opengl_error(__FILE__, __LINE__);
@@ -76,11 +77,29 @@ void Application::process_input(float delta_time) {
         glfwSetWindowShouldClose(window, true);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camera.camera_pos.z += player_speed * delta_time;
+        // camera.position.z += camera.speed * delta_time;
+        camera.process_movement(Camera::movement::BACKWARD, delta_time);
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camera.camera_pos.z -= player_speed * delta_time;
+        // camera.position.z -= camera.speed * delta_time;
+        camera.process_movement(Camera::movement::FORWARD, delta_time);
     }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camera.process_movement(Camera::movement::LEFT, delta_time);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.process_movement(Camera::movement::RIGHT, delta_time);
+    }
+    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
+        camera.mouse_data.captured = !camera.mouse_data.captured;
+
+        if (camera.mouse_data.captured) {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+        } else {
+            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        }
+    }
+
 }
 
 void Application::init_boids(BoidConfig& config) {
@@ -95,16 +114,15 @@ void Application::init_boids(BoidConfig& config) {
         p_y -= config.y_boundary;
         boids.back()->set_position(p_x, p_y, 0.0f);
 
-        float v_x = rand() % (int)(2 * max_speed);
-        float v_y = rand() % (int)(2 * max_speed);
-        v_x -= max_speed;
-        v_y -= max_speed;
+        float v_x = rand() % (int)(2 * config.max_speed);
+        float v_y = rand() % (int)(2 * config.max_speed);
+        v_x -= config.max_speed;
+        v_y -= config.max_speed;
         boids.back()->set_velocity(v_x, v_y, 0.0f);
         boids.back()->set_acceleration(0.0f, 0.0f, 0.0f);
         // std::cout << p_x << " " << p_y << "\n";
     }
 }
-
 
 void Application::draw_ui(bool show_window, float delta_time) {
     ImGui_ImplOpenGL3_NewFrame();
@@ -116,6 +134,8 @@ void Application::draw_ui(bool show_window, float delta_time) {
 
         ImGui::Begin("Controls", &show_window);
         ImGui::Text("FPS: %.2f", 1.0f / delta_time);
+        ImGui::Text("Position: %0.1f, %0.1f, %0.1f", camera.position.x, camera.position.y, camera.position.z);
+
         ImGui::Separator();
         ImGui::Checkbox("Cohesion", &config.enable_cohesion);
         ImGui::DragFloat("Radius##1", &config.cohesion_radius, 0.1f, 0.0f, FLT_MAX);
