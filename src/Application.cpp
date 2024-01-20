@@ -90,14 +90,13 @@ void Application::process_input(float delta_time) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.process_movement(Camera::movement::RIGHT, delta_time);
     }
-    if (glfwGetKey(window, GLFW_KEY_C) == GLFW_PRESS) {
-        camera.mouse_data.captured = !camera.mouse_data.captured;
-
-        if (camera.mouse_data.captured) {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-        } else {
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-        }
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+        camera.mouse_data.captured = true;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camera.mouse_data.captured = false;
+        glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
 
 }

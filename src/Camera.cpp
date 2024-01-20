@@ -15,9 +15,9 @@ glm::mat4 Camera::get_view_matrix() {
 
 void Camera::update_camera_vectors() {
 	glm::vec3 updated_font;
-	updated_font.x = std::cos(glm::radians(pitch) * glm::radians(yaw));
+	updated_font.x = std::cos(glm::radians(yaw)) * std::cos(glm::radians(pitch));
 	updated_font.y = std::sin(glm::radians(pitch));
-	updated_font.z = std::sin(glm::radians(pitch) * glm::radians(yaw));
+	updated_font.z = std::sin(glm::radians(yaw)) * std::cos(glm::radians(pitch));
 	front = glm::normalize(updated_font);
 
 	right = glm::normalize(glm::cross(front, up));
@@ -48,6 +48,8 @@ void Camera::process_movement(movement m, float delta_time) {
 }
 
 void Camera::process_mouse_movement(float x_offset, float y_offset, bool constrain_pitch) {
+	if (!mouse_data.captured) return;
+
 	x_offset *= mouse_sensitivity;
 	y_offset *= mouse_sensitivity;
 
