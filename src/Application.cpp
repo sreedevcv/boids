@@ -62,7 +62,8 @@ void Application::start() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         draw();
-        draw_ui(show_window);
+    
+        draw_ui(show_window, delta_time);
        
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -105,7 +106,7 @@ void Application::init_boids(BoidConfig& config) {
 }
 
 
-void Application::draw_ui(bool show_window) {
+void Application::draw_ui(bool show_window, float delta_time) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -114,12 +115,11 @@ void Application::draw_ui(bool show_window) {
         // ImGui::ShowDemoWindow();
 
         ImGui::Begin("Controls", &show_window);
-        // ImGui::Text("Cohesion");
-        ImGui::BeginGroup();
+        ImGui::Text("FPS: %.2f", 1.0f / delta_time);
+        ImGui::Separator();
         ImGui::Checkbox("Cohesion", &config.enable_cohesion);
         ImGui::DragFloat("Radius##1", &config.cohesion_radius, 0.1f, 0.0f, FLT_MAX);
         ImGui::DragFloat("Factor##1", &config.cohesion_factor, 0.1f, 0.0f, FLT_MAX);
-        ImGui::EndGroup();
         ImGui::Separator();
 
         ImGui::Checkbox("Alignment", &config.enable_alignment);

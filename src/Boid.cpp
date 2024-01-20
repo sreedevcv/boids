@@ -131,9 +131,12 @@ void Boid::clamp_velocity() {
 
 void Boid::draw() {
     glm::mat4 model = glm::mat4(1.0f);
-    // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 1.0f, 0.0f));
-    // model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.0f, 0.0f, 1.0f));
+    float angle = std::acos(glm::dot(glm::normalize(velocity), glm::vec3(0.0f, 1.0f, 0.0f)));
+    // if (std::isnan(angle)) {printf("hai\n");}
+    // float pi = glm::half_pi<float>();
     model = glm::translate(model, position);
+    model = glm::scale(model, glm::vec3(1.0f, 2.5f, 1.0f));
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glm::mat4 view = glm::lookAt(camera.camera_pos, camera.camera_pos + camera.camera_front, camera.camera_up);
 
     mesh.basic_shader.use();
