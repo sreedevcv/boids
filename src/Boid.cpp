@@ -28,7 +28,16 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
     position += velocity * delta_time;
 }
 
-glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>>& boids) {
+glm::vec3 Boid::avoid_wall() {
+    glm::vec3 impulse = glm::vec3(0.0f);
+    glm::vec3 percept_point = position + (glm::normalize(velocity) * percept_point);
+    if (abs(percept_point.x) >= config.x_boundary) {
+        
+    }
+    return glm::vec3();
+}
+
+glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>> &boids) {
     glm::vec3 impulse = glm::vec3(0.0f);
     glm::vec3 alignment_dir = glm::vec3(0.0f, 0.0f, 0.0f);
     int count = 0;

@@ -22,6 +22,7 @@ private:
     glm::vec3 acceleration;
     // float mass;
 
+    glm::vec3 avoid_wall();
     glm::vec3 alignment(std::vector<std::unique_ptr<Boid>>& boids);
     glm::vec3 cohesion(std::vector<std::unique_ptr<Boid>>& boids);
     glm::vec3 seperation(std::vector<std::unique_ptr<Boid>>& boids);

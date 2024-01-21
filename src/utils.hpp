@@ -19,12 +19,14 @@ struct BoidConfig {
     bool enable_seperation = true;
     bool enable_alignment = true;
 
-    float max_speed = 15.0f;
-    float min_speed = 5.0f;
     float x_boundary = 25.0f;
     float y_boundary = 25.0f;
     float z_boundary = 25.0f;
+
+    float max_speed = 15.0f;
+    float min_speed = 5.0f;
     int boid_count = 150;
+    float percept_distance = 7.0f;
 };
 
 consteval float norm_color(int color) {
