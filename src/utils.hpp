@@ -23,6 +23,7 @@ struct BoidConfig {
     float min_speed = 5.0f;
     float x_boundary = 25.0f;
     float y_boundary = 25.0f;
+    float z_boundary = 25.0f;
     int boid_count = 150;
 };
 

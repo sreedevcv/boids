@@ -36,6 +36,11 @@ void Application::update(float delta_time) {
             // pos.x *= -1;
             pos.y *= -1;
         }
+        if (std::abs(pos.z) > config.z_boundary) {
+            // boid->get_velocity().y *= -1;
+            // pos.x *= -1;
+            pos.z *= -1;
+        }
     }
 }
 
@@ -106,15 +111,19 @@ void Application::init_boids(BoidConfig& config) {
         
         float p_x = rand() % (int)(2 * config.x_boundary);
         float p_y = rand() % (int)(2 * config.y_boundary);
+        float p_z = rand() % (int)(2 * config.z_boundary);
         p_x -= config.x_boundary;
         p_y -= config.y_boundary;
-        boids.back()->set_position(p_x, p_y, 0.0f);
+        p_z -= config.z_boundary;
+        boids.back()->set_position(p_x, p_y, p_z);
 
         float v_x = rand() % (int)(2 * config.max_speed);
         float v_y = rand() % (int)(2 * config.max_speed);
+        float v_z = rand() % (int)(2 * config.max_speed);
         v_x -= config.max_speed;
         v_y -= config.max_speed;
-        boids.back()->set_velocity(v_x, v_y, 0.0f);
+        v_z -= config.max_speed;
+        boids.back()->set_velocity(v_x, v_y, v_z);
         boids.back()->set_acceleration(0.0f, 0.0f, 0.0f);
     }
 }
@@ -149,8 +158,11 @@ void Application::draw_ui(bool show_window, float delta_time) {
 
         ImGui::DragFloat("Max Speed", &config.max_speed);
         ImGui::DragFloat("Min Speed", &config.min_speed);
+        ImGui::Separator();
+
         ImGui::DragFloat("X Bounds", &config.x_boundary, 0.1f, 0.0f, FLT_MAX);
         ImGui::DragFloat("Y Bounds", &config.y_boundary, 0.1f, 0.0f, FLT_MAX);
+        ImGui::DragFloat("Z Bounds", &config.z_boundary, 0.1f, 0.0f, FLT_MAX);
         ImGui::Separator();
 
         if (ImGui::Button("Generate")) {

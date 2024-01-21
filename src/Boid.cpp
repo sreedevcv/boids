@@ -25,7 +25,6 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
 
     velocity += acceleration;
     clamp_velocity();
-    velocity.z = 0;
     position += velocity * delta_time;
 }
 
@@ -52,9 +51,7 @@ glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>>& boids) {
     }
 
     alignment_dir /= (float) count;
-    if (glm::length(alignment_dir) > 1000.0f) {printf("alignment_dir\n");}
     impulse = alignment_dir * config.alignment_factor;
-    impulse.z = 0;
     return impulse;
 }
 
@@ -84,8 +81,6 @@ glm::vec3 Boid::cohesion(std::vector<std::unique_ptr<Boid>>& boids) {
     glm::vec3 desired =  center_of_mass - position;
     desired = glm::normalize(desired);
     impulse = desired * config.cohesion_factor;
-    if (glm::length(impulse) > 1000.0f) {printf("cohesion\n");}
-    impulse.z = 0;
     return impulse;
 }
 
@@ -116,9 +111,7 @@ glm::vec3 Boid::seperation(std::vector<std::unique_ptr<Boid>>& boids) {
 
     avg_distance /= (float) count;
     avg_distance *= config.seperation_factor;
-    if (glm::length(avg_distance) > 1000.0f) {printf("avg_distance\n");}
     impulse = avg_distance;
-    impulse.z = 0;
     return impulse;
 }
 
