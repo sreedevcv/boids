@@ -6,8 +6,7 @@ Application::Application(GLFWwindow *glfw_window, const int width, const int hei
     scr_height(height),
     camera(_camera)
 {
-    // glfwSetCursorPosCallback(window, mouse_move_callback);
-    // camera.position.z = 70.0f;
+    camera.position.z = 70.0f;
 
     init_boids(config);
     check_for_opengl_error(__FILE__, __LINE__);
@@ -77,11 +76,9 @@ void Application::process_input(float delta_time) {
         glfwSetWindowShouldClose(window, true);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        // camera.position.z += camera.speed * delta_time;
         camera.process_movement(Camera::movement::BACKWARD, delta_time);
     }
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        // camera.position.z -= camera.speed * delta_time;
         camera.process_movement(Camera::movement::FORWARD, delta_time);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
@@ -90,11 +87,11 @@ void Application::process_input(float delta_time) {
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.process_movement(Camera::movement::RIGHT, delta_time);
     }
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS) {
         camera.mouse_data.captured = true;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+    if (glfwGetKey(window, GLFW_KEY_U) == GLFW_PRESS) {
         camera.mouse_data.captured = false;
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
     }
@@ -119,7 +116,6 @@ void Application::init_boids(BoidConfig& config) {
         v_y -= config.max_speed;
         boids.back()->set_velocity(v_x, v_y, 0.0f);
         boids.back()->set_acceleration(0.0f, 0.0f, 0.0f);
-        // std::cout << p_x << " " << p_y << "\n";
     }
 }
 

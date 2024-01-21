@@ -4,6 +4,7 @@
 #include <glm/mat4x4.hpp>
 
 #include "Shader.hpp"
+#include  "utils.hpp"
 
 class Pyramid {
 private:

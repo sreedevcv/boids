@@ -12,7 +12,6 @@ Boid::Boid(Camera &main_camera, BoidConfig &boid_config) :
 
 void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
     acceleration = glm::vec3(0.0f);
-    prev_velocity = velocity;
 
     if (config.enable_alignment) {
         acceleration += alignment(boids);
@@ -131,25 +130,19 @@ void Boid::clamp_velocity() {
 }
 
 void Boid::draw() {
-    // glm::mat4 model = glm::mat4(1.0f);
-    // float angle = std::acos(glm::dot(glm::normalize(velocity), glm::vec3(0.0f, 1.0f, 0.0f)));
-    // model = glm::translate(model, position);
-    // model = glm::scale(model, glm::vec3(0.8f, 2.5f, 0.8f));
-    // model = glm::rotate(model, angle, glm::vec3(0.0f, 0.0f, 1.0f));
-
     glm::vec3 curr_dir = glm::normalize(velocity);
-    glm::vec3 prev_dir = glm::normalize(prev_velocity);
-    glm::vec3 rotation_axis = glm::normalize(glm::cross(curr_dir, prev_dir));
-    float cos_theta = glm::dot(curr_dir, prev_dir);
+    glm::vec3 local_y_axis = glm::vec3(0.0f, 1.0f, 0.0f);
+    glm::vec3 rotation_axis = glm::normalize(glm::cross(local_y_axis, curr_dir));
+    float cos_theta = glm::dot(local_y_axis, curr_dir);
     float angle = std::acos(glm::clamp(cos_theta, -1.0f, 1.0f));
 
-    glm::mat4 model = glm::mat4(1.0f);
-    model = glm::translate(model, position);
-    model = glm::scale(model, glm::vec3(0.8f, 2.5f, 0.8f));
-    model = glm::rotate(model, -angle, rotation_axis);
-
     glm::mat4 view = camera.get_view_matrix();
-	// std::cout << camera.up.x << " " << camera.up.y << " " << camera.up.z << "\n";
+    glm::mat4 model = glm::mat4(1.0f);
+
+    model = glm::translate(model, position);
+    model = glm::rotate(model, angle, rotation_axis);
+    model = glm::scale(model, glm::vec3(0.8f, 1.5f, 0.8f));
+    prev_velocity = velocity;
 
     mesh.basic_shader.use();
     mesh.basic_shader.set_uniform_matrix("view", view);
@@ -173,4 +166,37 @@ void Boid::set_acceleration(float x, float y, float z) {
     acceleration.x = x;
     acceleration.y = y;
     acceleration.z = z;
+}
+
+glm::quat Boid::RotationBetweenVectors(glm::vec3 start, glm::vec3 dest){
+	start = normalize(start);
+	dest = normalize(dest);
+
+	float cosTheta = dot(start, dest);
+	glm::vec3 rotationAxis;
+
+	if (cosTheta < -1 + 0.001f){
+		// special case when vectors in opposite directions:
+		// there is no "ideal" rotation axis
+		// So guess one; any will do as long as it's perpendicular to start
+		rotationAxis = glm::cross(glm::vec3(0.0f, 0.0f, 1.0f), start);
+		if (glm::length2(rotationAxis) < 0.01 ) // bad luck, they were parallel, try again!
+			rotationAxis = glm::cross(glm::vec3(1.0f, 0.0f, 0.0f), start);
+
+		rotationAxis = normalize(rotationAxis);
+		return glm::angleAxis(glm::radians(180.0f), rotationAxis);
+	}
+
+	rotationAxis = glm::cross(start, dest);
+
+	float s = sqrt( (1+cosTheta)*2 );
+	float invs = 1 / s;
+
+	return glm::quat(
+		s * 0.5f, 
+		rotationAxis.x * invs,
+		rotationAxis.y * invs,
+		rotationAxis.z * invs
+	);
+
 }

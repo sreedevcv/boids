@@ -3,6 +3,7 @@
 #include <glm/vec3.hpp>
 #include <glm/mat4x4.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/quaternion.hpp>
 
 #include <vector>
 #include <memory>
@@ -19,7 +20,6 @@ private:
     glm::vec3 position;
     glm::vec3 velocity;
     glm::vec3 acceleration;
-    glm::vec3 prev_velocity;
     // float mass;
 
     glm::vec3 alignment(std::vector<std::unique_ptr<Boid>>& boids);
@@ -27,8 +27,11 @@ private:
     glm::vec3 seperation(std::vector<std::unique_ptr<Boid>>& boids);
 
     void clamp_velocity();
+    glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest);
+
 
 public:
+    glm::vec3 prev_velocity;
     Boid(Camera &camera, BoidConfig& boid_config);
     ~Boid() = default;
 

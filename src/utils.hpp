@@ -8,12 +8,12 @@ inline void check_for_opengl_error(const char *file, int line) {
 
 struct BoidConfig {
     float cohesion_radius = 7.0f;
-    float alignment_radius = 6.0f;
+    float alignment_radius = 5.0f;
     float seperation_radius = 5.0f;
 
-    float cohesion_factor = 2.0f;
-    float alignment_factor = 1.5f;
-    float seperation_factor = 10.0f;
+    float cohesion_factor = 14.0f;
+    float alignment_factor = 6.0f;
+    float seperation_factor = 100.0f;
 
     bool enable_cohesion = true;
     bool enable_seperation = true;
@@ -23,5 +23,9 @@ struct BoidConfig {
     float min_speed = 5.0f;
     float x_boundary = 25.0f;
     float y_boundary = 25.0f;
-    int boid_count = 250;
+    int boid_count = 150;
 };
+
+consteval float norm_color(int color) {
+    return static_cast<float>(color) / 255.0f;
+}

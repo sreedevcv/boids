@@ -1,15 +1,16 @@
 #include "Pyramid.hpp"
 
 Pyramid::Pyramid() {
-    float vertices[] = {
+
+    constexpr float vertices[] = {
         // positions        // Colors    
-        0.0f,  0.5f,  0.0f, 1.0f, 0.0f, 0.0f, 1.0f,  // Top vertex
-        -0.5f, -0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f,  // Bottom-left vertex
-        0.5f, -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f,  // Bottom-right vertex
-        0.0f, -0.5f, -0.5f, 1.0f, 0.0f, 1.0f, 1.0f,  // Back vertex
+        0.0f,  0.5f,  0.0f, norm_color(0),   norm_color(0),   norm_color(255), 1.0f,  // Top vertex
+        -0.5f, -0.5f, 0.5f, norm_color(200), norm_color(200), norm_color(255), 1.0f,  // Bottom-left vertex
+        0.5f, -0.5f,  0.5f, norm_color(200), norm_color(200), norm_color(255), 1.0f,  // Bottom-right vertex
+        0.0f, -0.5f, -0.5f, norm_color(200), norm_color(200), norm_color(255), 1.0f,  // Back vertex
     };
 
-    unsigned int indices[] = {
+    constexpr unsigned int indices[] = {
         0, 1, 2,  // Front face
         0, 1, 3,  // Left face
         0, 2, 3,  // Right face
