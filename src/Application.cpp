@@ -7,6 +7,7 @@ Application::Application(GLFWwindow *glfw_window, const int width, const int hei
     camera(_camera)
 {
     camera.position.z = 70.0f;
+    glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
 
     init_boids(config);
     check_for_opengl_error(__FILE__, __LINE__);
@@ -63,13 +64,15 @@ void Application::start() {
         update(delta_time);
 
 
-        glClearColor(0.1f, 0.1f, 0.15f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
+    // check_for_opengl_error(__FILE__, __LINE__);
+
         draw();
-    
         draw_ui(show_window, delta_time);
-       
+        // draw_cube();
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -184,4 +187,18 @@ void Application::draw_ui(bool show_window, float delta_time) {
     
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void Application::draw_cube() {
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::vec3 cube_scale = glm::vec3(config.x_boundary, config.y_boundary, config.z_boundary) * 2.0f;
+    model = glm::scale(model, cube_scale);
+    glm::mat4 view = camera.get_view_matrix();
+    glm::mat4 projection = camera.projection;
+
+    cube.basic_shader.use();
+    cube.basic_shader.set_uniform_matrix("model", model);
+    cube.basic_shader.set_uniform_matrix("view", view);
+    cube.basic_shader.set_uniform_matrix("projection", projection);
+    cube.draw();
 }

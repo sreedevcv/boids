@@ -8,18 +8,19 @@
 #include <vector>
 #include <memory>
 
-#include "Pyramid.hpp"
+#include "Tetrahedron.hpp"
 #include "Camera.hpp"
 
 class Boid {
 private:
-    Pyramid mesh;
+    Tetrahedron mesh;
     Camera& camera;
     BoidConfig& config;
 
     glm::vec3 position;
     glm::vec3 velocity;
     glm::vec3 acceleration;
+    float prev_angle = 0;
     // float mass;
 
     glm::vec3 avoid_wall();
@@ -28,9 +29,6 @@ private:
     glm::vec3 seperation(std::vector<std::unique_ptr<Boid>>& boids);
 
     void clamp_velocity();
-    glm::quat RotationBetweenVectors(glm::vec3 start, glm::vec3 dest);
-
-
 public:
     glm::vec3 prev_velocity;
     Boid(Camera &camera, BoidConfig& boid_config);

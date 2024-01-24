@@ -1,6 +1,6 @@
-#include "Pyramid.hpp"
+#include "Tetrahedron.hpp"
 
-Pyramid::Pyramid() {
+Tetrahedron::Tetrahedron() {
 
     constexpr float vertices[] = {
         // positions        // Colors    
@@ -37,12 +37,12 @@ Pyramid::Pyramid() {
     check_for_opengl_error(__FILE__, __LINE__);
 }
 
-Pyramid::~Pyramid() {
+Tetrahedron::~Tetrahedron() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
 }
 
-void Pyramid::draw() {
+void Tetrahedron::draw() {
     basic_shader.use();
     glBindVertexArray(VAO);
     glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);

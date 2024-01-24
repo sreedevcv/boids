@@ -6,15 +6,15 @@
 #include "Shader.hpp"
 #include  "utils.hpp"
 
-class Pyramid {
+class Tetrahedron {
 private:
     unsigned int VAO, VBO, EBO;
 
 public:
     Shader basic_shader;
 
-    Pyramid();
-    ~Pyramid();
+    Tetrahedron();
+    ~Tetrahedron();
 
     void draw();
 };

@@ -42,8 +42,9 @@ add_executable(
     src/Application.cpp 
     src/Shader.cpp 
     src/Boid.cpp 
-    src/Pyramid.cpp 
+    src/Tetrahedron.cpp 
     src/Camera.cpp 
+    src/Cuboid.cpp 
     src/glad.c 
 )
 

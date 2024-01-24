@@ -19,6 +19,7 @@
 // #include "Pyramid.hpp"
 #include "Camera.hpp"
 #include "Boid.hpp"
+#include "Cuboid.hpp"
 
 class Application {
 private:
@@ -27,7 +28,7 @@ private:
     GLFWwindow *window;
     Camera& camera;
     BoidConfig config;
-
+    Cuboid cube;
 
     std::vector<std::unique_ptr<Boid>> boids;
     // float max_speed = 8.0f;
@@ -35,6 +36,7 @@ private:
     void update(float delta_time);
     void draw();    
     void draw_ui(bool show_window, float delta_time);
+    void draw_cube();
     void process_input(float delta_time);
     void init_boids(BoidConfig& config);
 
