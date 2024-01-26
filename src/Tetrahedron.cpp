@@ -34,7 +34,7 @@ Tetrahedron::Tetrahedron() {
 
     basic_shader.compile("res/shaders/basic.vert", "res/shaders/basic.frag");
 
-    check_for_opengl_error(__FILE__, __LINE__);
+    check_for_opengl_error();
 }
 
 Tetrahedron::~Tetrahedron() {

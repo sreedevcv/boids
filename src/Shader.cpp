@@ -65,7 +65,7 @@ void Shader::compile(const char *vert_source, const char *frag_source) {
     glDeleteShader(vert_shader);
     glDeleteShader(frag_shader);
 
-    check_for_opengl_error(__FILE__, __LINE__);
+    check_for_opengl_error();
 }
 
 void Shader::use() {

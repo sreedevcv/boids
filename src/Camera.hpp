@@ -11,8 +11,6 @@ private:
     const int width;
     const int height;
 
-    float yaw = -90.0f;
-    float pitch = 0.0f;
 
     void update_camera_vectors();
 
@@ -22,6 +20,8 @@ public:
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 right = glm::vec3(0.0f, 0.0f, 0.0f);
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)width/(float)height, 0.1f, 100.0f);
+    float yaw = -90.0f;
+    float pitch = 0.0f;
 
     // Options
     float speed = 10.0f;

@@ -7,7 +7,7 @@ Boid::Boid(Camera &main_camera, BoidConfig &boid_config) :
 {
     mesh.basic_shader.use();
     mesh.basic_shader.set_uniform_matrix("projection", camera.projection);
-    check_for_opengl_error(__FILE__, __LINE__);
+    check_for_opengl_error();
 }
 
 void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {

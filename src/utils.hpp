@@ -1,10 +1,10 @@
 #pragma once
 
-inline void check_for_opengl_error(const char *file, int line) {
-    while (GLenum error = glGetError()) {
-        std::cout << file << ":" << line << " OpenGL Error: " << error << std::endl;
-    }
-}
+#define check_for_opengl_error() \
+    while (GLenum error = glGetError()) { \
+        std::cout << __FILE__ << ":" << __LINE__ << " OpenGL Error: " << error << std::endl; \
+    } \
+
 
 struct BoidConfig {
     float cohesion_radius = 7.0f;
