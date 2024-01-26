@@ -138,7 +138,8 @@ void Application::draw_ui(bool show_window, float delta_time) {
 
         ImGui::Begin("Controls", &show_window);
         ImGui::Text("FPS: %.2f", 1.0f / delta_time);
-        ImGui::Text("Position: %0.1f, %0.1f, %0.1f|Yaw: %0.1f, Pitch: %0.1f", camera.position.x, camera.position.y, camera.position.z, camera.yaw, camera.pitch);
+        ImGui::Text("Position: %0.1f, %0.1f, %0.1f", camera.position.x, camera.position.y, camera.position.z);
+        ImGui::Text("Yaw: %0.1f, Pitch: %0.1f", camera.yaw, camera.pitch);
 
         ImGui::Separator();
         ImGui::Checkbox("Cohesion", &config.enable_cohesion);

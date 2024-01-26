@@ -76,3 +76,9 @@ void Shader::set_uniform_matrix(const char *name, glm::mat4& value) {
     int loc = glGetUniformLocation(ID, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 }
+
+void Shader::set_uniform_float(const char *name, float value) {
+    int loc = glGetUniformLocation(ID, name);
+    glUniform1f(loc, value);
+    // glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
+}

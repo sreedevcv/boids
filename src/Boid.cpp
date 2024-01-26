@@ -157,15 +157,15 @@ void Boid::draw() {
     glm::mat4 model = glm::mat4(1.0f);
 
     model = glm::translate(model, position);
-
     model = glm::rotate(model, angle, rotation_axis);
-    prev_angle = angle;
     model = glm::scale(model, glm::vec3(0.8f, 1.5f, 0.8f));
-    // prev_velocity = velocity;
 
     mesh.basic_shader.use();
     mesh.basic_shader.set_uniform_matrix("view", view);
     mesh.basic_shader.set_uniform_matrix("model", model);
+    mesh.basic_shader.set_uniform_float("x_max", config.x_boundary);
+    mesh.basic_shader.set_uniform_float("y_max", config.y_boundary);
+    mesh.basic_shader.set_uniform_float("z_max", config.z_boundary);
     mesh.draw();
 }
 

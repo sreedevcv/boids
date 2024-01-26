@@ -23,4 +23,5 @@ public:
     void compile(const char *vert_shader, const char *frag_shader);
     void use();
     void set_uniform_matrix(const char *name, glm::mat4& value);
+    void set_uniform_float(const char *name, float value);
 };
