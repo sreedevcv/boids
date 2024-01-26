@@ -23,18 +23,33 @@ void Boid::update(float delta_time, std::vector<std::unique_ptr<Boid>>& boids) {
         acceleration += seperation(boids);
     }
 
+    // acceleration += avoid_wall();
+
     velocity += acceleration;
     clamp_velocity();
+    velocity += avoid_wall();
+
     position += velocity * delta_time;
 }
 
 glm::vec3 Boid::avoid_wall() {
     glm::vec3 impulse = glm::vec3(0.0f);
-    glm::vec3 percept_point = position + (glm::normalize(velocity) * config.percept_distance);
-    if (std::abs(percept_point.x) >= config.x_boundary) {
-        
+    glm::vec3 direction = glm::normalize(velocity);
+    glm::vec3 percept_point = position + (direction * config.percept_distance);
+
+    if (std::abs(percept_point.y) >= config.y_boundary) {
+        float sign = position.y >= 0 ? 1.0f : -1.0f;
+        impulse.y = 1.0f / -(sign * config.y_boundary - position.y);
     }
-    return glm::vec3();
+    if (std::abs(percept_point.x) >= config.x_boundary) {
+        float sign = position.x >= 0 ? 1.0f : -1.0f;
+        impulse.x = 1.0f / -(sign * config.x_boundary - position.x);
+    }
+    if (std::abs(percept_point.z) >= config.z_boundary) {
+        float sign = position.z >= 0 ? 1.0f : -1.0f;
+        impulse.z = 1.0f / -(sign * config.z_boundary - position.z);
+    }
+    return impulse;
 }
 
 glm::vec3 Boid::alignment(std::vector<std::unique_ptr<Boid>> &boids) {

@@ -29,18 +29,15 @@ void Application::update(float delta_time) {
         glm::vec3& pos = boid->get_position();
         if (std::abs(pos.x) > config.x_boundary) {
             // boid->get_velocity().x *= -1;
-            pos.x *= -1;
-            // pos.y *= -1;
+            pos.x -= 0.01f * pos.x;
         }
         if (std::abs(pos.y) > config.y_boundary) {
             // boid->get_velocity().y *= -1;
-            // pos.x *= -1;
-            pos.y *= -1;
+            pos.y -= 0.01f * pos.y;
         }
         if (std::abs(pos.z) > config.z_boundary) {
-            // boid->get_velocity().y *= -1;
-            // pos.x *= -1;
-            pos.z *= -1;
+            // boid->get_velocity().z *= -1;
+            pos.z -= 0.01f * pos.z;
         }
     }
 }
