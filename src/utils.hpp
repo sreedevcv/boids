@@ -19,9 +19,9 @@ struct BoidConfig {
     bool enable_seperation = true;
     bool enable_alignment = true;
 
-    float x_boundary = 50.0f;
-    float y_boundary = 50.0f;
-    float z_boundary = 50.0f;
+    float x_boundary = 40.0f;
+    float y_boundary = 40.0f;
+    float z_boundary = 40.0f;
 
     float max_speed = 15.0f;
     float min_speed = 5.0f;

@@ -1,7 +1,8 @@
 # Boids
 A [Boids](http://www.red3d.com/cwr/boids/) simulation written in C++ using OpenGL, GLFW, glm and ImGui.
 
-![Screenshot](images/screenshot1.png)
+![Screenshot](images/screenshot2.png)
+![Screenshot](images/screenshot3.png)
 
 ## How to build and run
 
